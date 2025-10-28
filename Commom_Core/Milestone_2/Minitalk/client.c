@@ -11,7 +11,7 @@
 //Check bellow for detailed info on the variable.
 volatile sig_atomic_t	g_ack = 1;
 
-void	signal_handler(int signal)
+void	server_signal_check(int signal)
 {
 	//Any time we receive a signal SIGUSR2 from the server, the program changes
 		//g_ack to 0 so we can tell the send_signal() function to keep going
@@ -38,7 +38,7 @@ void	send_pid(int server_pid)
 		//We move a number of bits on client_pid equal to bit_index, and store that
 			//on the bit variable.
 		bit = client_pid >> bit_index;
-		 //We use the bit modulus of 2 (the rest of the division of bit by 2) to
+		//We use the bit modulus of 2 (the rest of the division of bit by 2) to
 		 	//check if the bit we want to send is 1 or 0.
 		if (bit %2 != 0) //This work because we're dealing with binaries.
 			kill(server_pid, SIGUSR1); //We send a 1 signal if the bit is 1.
@@ -52,20 +52,32 @@ void	send_pid(int server_pid)
 
 void	send_signal(int pid, unsigned char character, int bit_index)
 {
+	//Each time we call this function it will send a character to the Server, bit
+		//by bit in a loop that will run 8 times.
+	//We declare just a char variable to be a temporary variable to hold each bit
+		//of the character..
 	unsigned char	bit;
 
 	bit = 0;
-	while (bit_index > 0)
+	while (bit_index > 0) //Run the loop until we have sent 8 signals.
 	{
 		bit_index--;
 		bit = character >> bit_index;
+		//We use the bit modulus of 2 (the rest of the division of bit by 2) to
+		 	//check if the bit we want to send is 1 or 0.		
 		if (bit % 2 != 0)
-			kill(pid, SIGUSR1);
-		else
+			kill(pid, SIGUSR1); //We send a 1 signal if the bit is 1.
+		else //Otherwise we send a 0 signal if the bit is 0.
 			kill(pid, SIGUSR2);
+		//Then we have the program wait until it receives a signal back from the
+			//server, and only then it sends another signal, to not cause it to
+			// lose info.
+		 //We do this with the help of the g_ack global variable. When the Server
+		 	//sends a signal, the server_signal_check() function will change g_ack
+			//to 0 and break the usleep() loop.
 		while (g_ack)
-			usleep(200);
-		g_ack = 1;
+			usleep(10); //Until this loop is broken, we usleep().
+		g_ack = 1; //After the loop is broken we reset g_ack to send the next signal.
 	}
 }
 
@@ -84,8 +96,8 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	//Then we prepare the program to receive the signal from the Server, for the
-		//signal_handler() funciton.
-	signal(SIGUSR2, signal_handler); //In this case we need only SIGUSR2 for 0.
+		//server_signal_check() funciton.
+	signal(SIGUSR2, server_signal_check); //In this case we need only SIGUSR2 for 0.
 	server_pid = ft_atoi(argv[1]); //We get the Server PID in argv[1].
 	send_pid(server_pid); //Then we send the Client PID to the Server before the message.
 	i = 0; //Start the index.
