@@ -1,31 +1,27 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: turocha- <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/14 14:04:07 by turocha-          #+#    #+#             */
-/*   Updated: 2025/10/14 14:04:11 by turocha-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../game.h"
 
-int	check_map_path(int **matrix, char *map_path, int *start, int *row_and_collumn)
+void	check_map_path(int **matrix, char *map_path, int *row_and_column)
 {
-	if (start[0] == row_and_collumn[0] - 1 && start[1] == row_and_collumn[1] - 1)
-		return (matrix[start[0]][start[1]]);
-	if (matrix[start[0]][start[1]] == C || matrix[start[0]][start[1]] == P)
-		check_exit(map_path, matrix, start, row_and_collumn);
-	if (start[1] == row_and_collumn[1] - 1)
+	int	index[2];
+
+	index[0] = 0;
+	index[1] = 0;
+	while (index[0] < row_and_column[0])
 	{
-		start[0]++;
-		start[1] = 0;
-		return (check_map_path(matrix, map_path, start, row_and_collumn));
+		index[1] = 0;
+		while (index[1] < row_and_column[1])
+		{
+			if (index[0] == row_and_column[0] - 1
+				&& index[1] == row_and_column[1] - 1)
+				return ;
+			if (matrix[index[0]][index[1]] == C
+				|| matrix[index[0]][index[1]] == P)
+				check_exit(map_path, matrix, index, row_and_column);
+			index[1]++;
+		}
+		index[0]++;
 	}
-	start[1]++;
-	return (check_map_path(matrix, map_path, start, row_and_collumn));
+	return ;
 }
 
 static int	check_char(int c)
