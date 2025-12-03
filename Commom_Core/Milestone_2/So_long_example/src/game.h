@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: turocha- <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/14 14:03:50 by turocha-          #+#    #+#             */
-/*   Updated: 2025/10/14 14:03:58 by turocha-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef GAME_H
 # define GAME_H
 
@@ -45,7 +33,7 @@ typedef struct s_player
 typedef struct s_map
 {
 	int	**matrix;
-	int	*row_and_collumn;
+	int	*row_and_column;
 }	t_map;
 
 typedef struct s_game
@@ -77,10 +65,10 @@ typedef struct s_map_errors
 	int	c;
 	int	p;
 	int	e;
-	int	extra;
 }	t_map_errors;
 
 //free
+int		quit(t_game *game);
 void	free_matrix(int **matrix, int rows);
 void	free_map(t_map *map);
 void	free_player(t_player *player, t_game *game);
@@ -90,30 +78,28 @@ void	free_game(t_game *game);
 void	analyze_matrix(int **matrix, int row, int col, t_map_errors *error);
 int		check_matrix_errors(int **matrix, int row, int col);
 void	map_error(int error, int fd, char *temp, char c);
-void	check_start_errors(int *row_and_collumn, int **matrix, char *argv);
-void	malloc_error(t_game *game, int **matrix, int *row_and_collumn);
+void	check_start_errors(int *row_and_column, int **matrix, char *argv);
+void	malloc_error(t_game *game, int **matrix, int *row_and_column);
 
 //map
-int		check_map_path(int **matrix, char *map_path, int *start, int *row_and_collumn);
+void	check_map_path(int **matrix, char *map_path, int *row_and_column);
 int		check_map(char *path, int i);
 
 //matrix
-int		set_row_and_collumn(int *row_and_collumn, char *path);
-void	check_exit(char *map_path, int **matrix, int *index, int *row_and_collumn);
-int		**create_matrix(int *row_and_collumn, int **matrix, char *map_path);
+int		set_row_and_column(int *row_and_column, char *path);
+void	check_exit(char *map_path, int **matrix, int *index, int *row_and_column);
+int		**create_matrix(int *row_and_column, int **matrix, char *map_path);
 
 //game
-int		quit(t_game *game);
 void	check_to_collect(t_game *game);
 int		callbacks(t_game *game);
-int		game_start(int **matrix, int *row_and_collumn);
+int		game_start(int **matrix, int *row_and_column);
 
 //init
-t_game	*init_game_structs(int **matrix, int *row_and_collumn);
+t_game	*init_game_structs(int **matrix, int *row_and_column);
 void	load_images(t_game *game);
 
 //position
-void	update_pos(int keycode, t_player *player, t_game *game);
 int		events(int keycode, t_game *game);
 
 //render
