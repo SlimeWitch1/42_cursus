@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = 
+CFLAGS = -Wall -Werror -Wextra
 SRC = ./src/main.c ./src/free.c \
 	./src/map_validation/errors.c \
 	./src/map_validation/map.c \
