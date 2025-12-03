@@ -1,27 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   position.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: turocha- <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/14 14:04:34 by turocha-          #+#    #+#             */
-/*   Updated: 2025/10/14 14:04:39 by turocha-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../game.h"
 
-static int	check_pos(int collumn, int row, t_game *game)
+static int	check_pos(int column, int row, t_game *game)
 {
-	if (game->map->matrix[row][collumn] == 1)
+	if (game->map->matrix[row][column] == 1)
 		return (0);
-	if (game->map->matrix[row][collumn] == C)
+	if (game->map->matrix[row][column] == C)
 	{
-		game->map->matrix[row][collumn] = 0;
+		game->map->matrix[row][column] = 0;
 		check_to_collect(game);
 	}
-	if (game->map->matrix[row][collumn] == E)
+	if (game->map->matrix[row][column] == E)
 	{
 		if (game->can_exit == 1)
 			game->end = 1;
@@ -35,7 +23,7 @@ static int	check_pos(int collumn, int row, t_game *game)
 	return (1);
 }
 
-void	update_pos(int keycode, t_player *player, t_game *game)
+static void	update_pos(int keycode, t_player *player, t_game *game)
 {
 	if (keycode == W || keycode == UP)
 	{
