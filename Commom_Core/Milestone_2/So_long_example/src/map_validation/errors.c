@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: turocha- <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/14 14:02:16 by turocha-          #+#    #+#             */
-/*   Updated: 2025/10/14 14:02:28 by turocha-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../game.h"
 
-void	analyze_matrix(int **matrix, int row, int col, t_map_errors *error)
+void	analyze_matrix(int **matrix, int row, int column, t_map_errors *error)
 {
 	int	i;
 	int	j;
@@ -21,9 +9,9 @@ void	analyze_matrix(int **matrix, int row, int col, t_map_errors *error)
 	while (i < row)
 	{
 		j = 0;
-		while (j < col)
+		while (j < column)
 		{
-			if ((matrix[i][0] != 1 || matrix[i][col - 1] != 1)
+			if ((matrix[i][0] != 1 || matrix[i][column - 1] != 1)
 				|| (matrix[0][j] != 1 || matrix[row - 1][j] != 1))
 				error->w = -1;
 			if (matrix[i][j] == P)
@@ -38,7 +26,7 @@ void	analyze_matrix(int **matrix, int row, int col, t_map_errors *error)
 	}
 }
 
-int	check_matrix_errors(int **matrix, int row, int col)
+int	check_matrix_errors(int **matrix, int row, int column)
 {
 	t_map_errors	*error;
 
@@ -47,7 +35,7 @@ int	check_matrix_errors(int **matrix, int row, int col)
 	error->c = 0;
 	error->p = 0;
 	error->e = 0;
-	analyze_matrix(matrix, row, col, error);
+	analyze_matrix(matrix, row, column, error);
 	if (error->w == -1 || error->c == 0 || error->e != 1 || error->p != 1)
 	{
 		if (error->w == -1)
@@ -91,26 +79,26 @@ void	map_error(int error, int fd, char *temp, char c)
 	}
 }
 
-void	check_start_errors(int *row_and_collumn, int **matrix, char *argv)
+void	check_start_errors(int *row_and_column, int **matrix, char *argv)
 {
 	if (ft_strncmp(&argv[ft_strlen(argv) - 4], ".ber", 4) != 0)
 	{
 		ft_printf("Invalid extension. Need .ber");
-		free_matrix(matrix, row_and_collumn[0]);
+		free_matrix(matrix, row_and_column[0]);
 		exit(1);
 	}
-	if (!check_matrix_errors(matrix, row_and_collumn[0], row_and_collumn[1]))
+	if (!check_matrix_errors(matrix, row_and_column[0], row_and_column[1]))
 	{
-		free_matrix(matrix, row_and_collumn[0]);
+		free_matrix(matrix, row_and_column[0]);
 		exit(1);
 	}
 }
 
-void	malloc_error(t_game *game, int **matrix, int *row_and_collumn)
+void	malloc_error(t_game *game, int **matrix, int *row_and_column)
 {
 	ft_printf("Not enough memory to allocate\n");
 	if (matrix)
-		free_matrix(matrix, row_and_collumn[0]);
+		free_matrix(matrix, row_and_column[0]);
 	free_game(game);
 	exit(1);
 }
