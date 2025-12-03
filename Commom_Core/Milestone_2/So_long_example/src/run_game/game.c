@@ -1,46 +1,20 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: turocha- <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/14 14:03:06 by turocha-          #+#    #+#             */
-/*   Updated: 2025/10/14 14:03:29 by turocha-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../game.h"
-
-int	quit(t_game *game)
-{
-	if (game && game->mlx && game->window)
-		mlx_destroy_window(game->mlx, game->window);
-	free_game(game);
-	if (game && game->mlx)
-	{
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-	}
-	free(game);
-	exit(0);
-}
 
 void	check_to_collect(t_game *game)
 {
-	int	collumn;
+	int	column;
 	int	row;
 
 	row = 0;
 	game->to_collect = 0;
-	while (row < game->map->row_and_collumn[0])
+	while (row < game->map->row_and_column[0])
 	{
-		collumn = 0;
-		while (collumn < game->map->row_and_collumn[1])
+		column = 0;
+		while (column < game->map->row_and_column[1])
 		{
-			if (game->map->matrix[row][collumn] == C)
+			if (game->map->matrix[row][column] == C)
 				game->to_collect++;
-			collumn++;
+			column++;
 		}
 		row++;
 	}
@@ -68,16 +42,16 @@ int	callbacks(t_game *game)
 	return (0);
 }
 
-int	game_start(int **matrix, int *row_and_collumn)
+int	game_start(int **matrix, int *row_and_column)
 {
 	t_game	*game;
 
-	game = init_game_structs(matrix, row_and_collumn);
+	game = init_game_structs(matrix, row_and_column);
 	game->mlx = mlx_init();
 	if (!game->mlx)
-		malloc_error(game, matrix, row_and_collumn);
-	game->window = mlx_new_window(game->mlx, 32 * row_and_collumn[1],
-			32 * row_and_collumn[0], "So long and thanks for all the fish");
+		malloc_error(game, matrix, row_and_column);
+	game->window = mlx_new_window(game->mlx, 32 * row_and_column[1],
+			32 * row_and_column[0], "So long and thanks for all the fish");
 	ft_printf("Move with WASD or Arrow Keys.\nCollect all the treasure!\n");
 	load_images(game);
 	check_to_collect(game);
