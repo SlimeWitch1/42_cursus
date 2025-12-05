@@ -14,7 +14,7 @@ LIBFT = ./libft/libft.a
 NAME = so_long
 OBJ = $(SRC:.c=.o)
 
-all: $(LIB)
+all:
 	cd mlx && make
 	cd libft && make
 	@$(CC) $(CFLAGS) $(SRC) $(LIBFT) ./mlx/libmlx_Linux.a -I./mlx -lXext -lX11 -lm -lz -o $(NAME)
