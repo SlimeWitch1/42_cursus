@@ -1,19 +1,14 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: turocha- <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/10/14 14:05:27 by turocha-          #+#    #+#              #
-#    Updated: 2025/10/14 14:05:31 by turocha-         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
-CC = gcc
-CFLAGS = 
-SRC = ./src/errors.c ./src/free.c ./src/game.c \
-	./src/map.c ./src/matrix.c ./src/position.c ./src/render.c
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+SRC = ./src/main.c ./src/free.c \
+	./src/map_validation/map.c \
+	./src/map_validation/matrix.c \
+	./src/map_validation/validation.c \
+	./src/run_game/game.c \
+	./src/run_game/init.c \
+	./src/run_game/position.c \
+	./src/run_game/render.c
 
 LIBFT = ./libft/libft.a
 NAME = so_long
