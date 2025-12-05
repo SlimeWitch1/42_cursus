@@ -6,7 +6,7 @@ static void	map_error(int error, int fd, char *temp, char c)
 	if (error == 1)
 	{
 		close (fd);
-		ft_printf("Invalid Map 1");
+		ft_printf("Invalid Map or File not Found");
 		exit(1);
 	}
 	if (error == 2)
@@ -52,7 +52,7 @@ static int	validate_line(char *line, int len, int *error, char *error_i)
 	return (1);
 }
 
-int	check_map(char *path, int i)
+int	check_map(char *path)
 {
 	int		len;
 	int		fd;
