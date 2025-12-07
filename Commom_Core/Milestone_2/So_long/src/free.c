@@ -3,7 +3,7 @@
 
 void	malloc_error(t_game *game, int **matrix, int *row_and_column)
 {
-	ft_printf("Not enough memory to allocate\n");
+	ft_printf("Error\nNot enough memory to allocate\n");
 	if (matrix)
 		free_matrix(matrix, row_and_column[0]);
 	free_game(game);
