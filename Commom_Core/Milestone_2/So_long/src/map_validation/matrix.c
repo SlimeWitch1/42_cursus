@@ -14,13 +14,13 @@ int	matrix_error(int **matrix, int row, int column)
 	if (error->w == -1 || error->c == 0 || error->e != 1 || error->p != 1)
 	{
 		if (error->w == -1)
-			ft_printf("Invalid Wall: Add Walls (1) on all borders\n");
+			ft_printf("Error\nInvalid Wall: Add Walls (1) on all borders\n");
 		else if (error->c == 0)
-			ft_printf("Invalid Collectible: Add at least one (C)\n");
+			ft_printf("Error\nInvalid Collectible: Add at least one (C)\n");
 		else if (error->e != 1)
-			ft_printf("Invalid Exit : Add exactly 1 (E)\n");
+			ft_printf("Error\nInvalid Exit : Add exactly 1 (E)\n");
 		else if (error->p != 1)
-			ft_printf("Invalid Player : Add exactly 1 (P)\n");
+			ft_printf("Error\nInvalid Player : Add exactly 1 (P)\n");
 		free(error);
 		return (1);
 	}
@@ -32,16 +32,25 @@ int	set_row_and_column(int *row_and_column, char *path)
 {
 	char	*temp_line;
 	int		fd;
+	int i = 0;
 
 	fd = open(path, O_RDONLY);
 	temp_line = get_next_line(fd);
-	row_and_column[1] = -1;
+	row_and_column[1] = 0;
 	row_and_column[0] = 0;
 	while (temp_line != NULL)
 	{
-		if (row_and_column[1] == -1)
-			row_and_column[1] += ft_strlen(temp_line);
+		if (row_and_column[1] == 0)
+			row_and_column[1] += ft_strlen(temp_line) - 1;
 		row_and_column[0]++;
+		ft_printf("%d:aaa%caaa\n", i, temp_line[ft_strlen(temp_line) - 1]);
+		i++;
+		if (temp_line[row_and_column[1]] != '\n' && temp_line[row_and_column[1]] != '\0')
+		{
+			free(temp_line);
+			close(fd);
+			return (0);
+		}
 		free(temp_line);
 		temp_line = get_next_line(fd);
 	}
