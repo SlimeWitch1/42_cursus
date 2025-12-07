@@ -41,7 +41,27 @@ void	check_to_collect(t_game *game)
 
 int	callbacks(t_game *game)
 {
-	mlx_clear_window(game->mlx, game->window);
+	mlx_clear_window(
+int	game_start(int **matrix, int *row_and_column)
+{
+	t_game	*game;
+
+	game = init_game_structs(matrix, row_and_column);
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		malloc_error(game, matrix, row_and_column);
+	game->window = mlx_new_window(game->mlx, 32 * row_and_column[1],
+			32 * row_and_column[0], "So long and thanks for all the fish");
+	ft_printf("Move with WASD or Arrow Keys.\nCollect all the treasure!\n");
+	load_images(game);
+	check_to_collect(game);
+	mlx_loop_hook(game->mlx, callbacks, game);
+	mlx_hook(game->window, 2, 1L << 0, keyboard_events, game);
+	mlx_hook(game->window, 17, 0, quit, game);
+	mlx_loop(game->mlx);
+	return (0);
+}
+game->mlx, game->window);
 	main_display(game);
 	mlx_put_image_to_window(game->mlx, game->window, game->player->img,
 		game->player->x * game->player->width,
