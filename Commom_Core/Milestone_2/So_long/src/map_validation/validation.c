@@ -1,104 +1,99 @@
 
 #include "../game.h"
 
-void	check_matrix(int **matrix, int row, int column, t_map_errors *error)
+int	quit(t_game *game)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < row)
+	if (game && game->mlx && game->window)
+		mlx_destroy_window(game->mlx, game->window);
+	free_game(game);
+	if (game && game->mlx)
 	{
-		j = 0;
-		while (j < column)
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+	free(game);
+	exit(0);
+}
+
+void	check_to_collect(t_game *game)
+{
+	int	column;
+	int	row;
+
+	row = 0;
+	game->to_collect = 0;
+	while (row < game->map->row_and_column[0])
+	{
+		column = 0;
+		while (column < game->map->row_and_column[1])
 		{
-			if ((matrix[i][0] != 1 || matrix[i][column - 1] != 1)
-				|| (matrix[0][j] != 1 || matrix[row - 1][j] != 1))
-				error->w = -1;
-			if (matrix[i][j] == P)
-				error->p++;
-			if (matrix[i][j] == E)
-				error->e++;
-			if (matrix[i][j] == C)
-				error->c++;
-			j++;
+			if (game->map->matrix[row][column] == C)
+				game->to_collect++;
+			column++;
 		}
-		i++;
+		row++;
 	}
+	if (game->to_collect == 0)
+		ft_printf("You collected all the treasure! Find the exit...\n");
+	else
+		ft_printf("You have %d more treasure to collect.\n", game->to_collect);
 }
 
-static void	analyze_exit(t_map *matrix, int row, int column, int *reach_exit)
+int	callbacks(t_game *game)
 {
-	if (row < 0 || column < 0 || row >= matrix->row_and_column[0]
-		|| column >= matrix->row_and_column[1]
-		|| matrix->matrix[row][column] == 1)
-		return ;
-	if (matrix->matrix[row][column] == E)
+	mlx_clear_window(
+int	game_start(int **matrix, int *row_and_column)
+{
+	t_game	*game;
+
+	game = init_game_structs(matrix, row_and_column);
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		malloc_error(game, matrix, row_and_column);
+	game->window = mlx_new_window(game->mlx, 32 * row_and_column[1],
+			32 * row_and_column[0], "So long and thanks for all the fish");
+	ft_printf("Move with WASD or Arrow Keys.\nCollect all the treasure!\n");
+	load_images(game);
+	check_to_collect(game);
+	mlx_loop_hook(game->mlx, callbacks, game);
+	mlx_hook(game->window, 2, 1L << 0, keyboard_events, game);
+	mlx_hook(game->window, 17, 0, quit, game);
+	mlx_loop(game->mlx);
+	return (0);
+}
+game->mlx, game->window);
+	main_display(game);
+	mlx_put_image_to_window(game->mlx, game->window, game->player->img,
+		game->player->x * game->player->width,
+		game->player->y * game->player->height);
+	mlx_do_sync(game->mlx);
+	if (game->to_collect == 0)
+		game->can_exit = 1;
+	if (game->end == 1)
 	{
-		reach_exit[0] = 1;
-		return ;
+		ft_printf("YOU WIN!!!\nYou used %d movements...\n",
+			game->player->move_count);
+		quit(game);
 	}
-	matrix->matrix[row][column] = 1;
-	analyze_exit(matrix, row - 1, column, reach_exit);
-	analyze_exit(matrix, row + 1, column, reach_exit);
-	analyze_exit(matrix, row, column - 1, reach_exit);
-	analyze_exit(matrix, row, column + 1, reach_exit);
+	return (0);
 }
 
-static void	check_exit(char *map_path, int **matrix,
-	int *index, int *row_and_column)
+int	game_start(int **matrix, int *row_and_column)
 {
-	t_map	*map_temp;
-	int		reach_exit[1];
+	t_game	*game;
 
-	map_temp = NULL;
-	map_temp = malloc(sizeof(t_map));
-	map_temp->matrix = NULL;
-	map_temp->row_and_column = NULL;
-	reach_exit[0] = 0;
-	map_temp->matrix = create_matrix(row_and_column, matrix, map_path);
-	map_temp->row_and_column = row_and_column;
-	analyze_exit(map_temp, index[0], index[1], reach_exit);
-	if (reach_exit[0] != 1)
-	{
-		ft_printf("Error\nNo Valid Path\n");
-		free_map(map_temp);
-		free_matrix(matrix, row_and_column[0]);
-		exit(1);
-	}
-	free_map(map_temp);
-}
-
-void	check_map_path(int **matrix, char *map_path, int *row_and_column)
-{
-	int	index[2];
-
-	index[0] = 0;
-	index[1] = 0;
-	while (index[0] < row_and_column[0])
-	{
-		index[1] = 0;
-		while (index[1] < row_and_column[1])
-		{
-			if (index[0] == row_and_column[0] - 1
-				&& index[1] == row_and_column[1] - 1)
-				return ;
-			if (matrix[index[0]][index[1]] == C
-				|| matrix[index[0]][index[1]] == P)
-				check_exit(map_path, matrix, index, row_and_column);
-			index[1]++;
-		}
-		index[0]++;
-	}
-	return ;
-}
-
-void	check_extension(int *row_and_column, int **matrix, char *argv1)
-{
-	if (ft_strncmp(&argv1[ft_strlen(argv1) - 4], ".ber", 4) != 0)
-	{
-		ft_printf("Error\nInvalid extension. Need .ber");
-		free_matrix(matrix, row_and_column[0]);
-		exit(1);
-	}
+	game = init_game_structs(matrix, row_and_column);
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		malloc_error(game, matrix, row_and_column);
+	game->window = mlx_new_window(game->mlx, 32 * row_and_column[1],
+			32 * row_and_column[0], "So long and thanks for all the fish");
+	ft_printf("Move with WASD or Arrow Keys.\nCollect all the treasure!\n");
+	load_images(game);
+	check_to_collect(game);
+	mlx_loop_hook(game->mlx, callbacks, game);
+	mlx_hook(game->window, 2, 1L << 0, keyboard_events, game);
+	mlx_hook(game->window, 17, 0, quit, game);
+	mlx_loop(game->mlx);
+	return (0);
 }
