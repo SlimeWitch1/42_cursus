@@ -76,7 +76,6 @@ void	free_player(t_player *player, t_game *game);
 void	free_game(t_game *game);
 
 //map(4)
-//void	map_error(int error, int fd, char *temp, char c);
 int		check_map(char *path);
 
 //matrix(4)
