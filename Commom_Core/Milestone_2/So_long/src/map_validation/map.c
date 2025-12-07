@@ -6,13 +6,13 @@ static void	map_error(int error, int fd, char *temp, char c)
 	if (error == 1)
 	{
 		close (fd);
-		ft_printf("Invalid Map or File not Found");
+		ft_printf("Error\nInvalid Map or File not Found");
 		exit(1);
 	}
 	if (error == 2)
 	{
 		close (fd);
-		ft_printf("Invalid Char found : '%c' \n", c);
+		ft_printf("Error\nInvalid Char found : '%c' \n", c);
 		if (temp)
 			free(temp);
 		exit(1);
@@ -20,7 +20,7 @@ static void	map_error(int error, int fd, char *temp, char c)
 	if (error == 3)
 	{
 		close (fd);
-		ft_printf("Invalid Map 3 \n");
+		ft_printf("Error\nInvalid Map\n");
 		if (temp)
 			free(temp);
 		exit(1);
@@ -80,3 +80,4 @@ int	check_map(char *path)
 	close(fd);
 	return (1);
 }
+
