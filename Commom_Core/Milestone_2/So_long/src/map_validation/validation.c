@@ -61,7 +61,7 @@ static void	check_exit(char *map_path, int **matrix,
 	analyze_exit(map_temp, index[0], index[1], reach_exit);
 	if (reach_exit[0] != 1)
 	{
-		ft_printf("No Valid Path\n");
+		ft_printf("Error\nNo Valid Path\n");
 		free_map(map_temp);
 		free_matrix(matrix, row_and_column[0]);
 		exit(1);
@@ -97,7 +97,7 @@ void	check_extension(int *row_and_column, int **matrix, char *argv1)
 {
 	if (ft_strncmp(&argv1[ft_strlen(argv1) - 4], ".ber", 4) != 0)
 	{
-		ft_printf("Invalid extension. Need .ber");
+		ft_printf("Error\nInvalid extension. Need .ber");
 		free_matrix(matrix, row_and_column[0]);
 		exit(1);
 	}
