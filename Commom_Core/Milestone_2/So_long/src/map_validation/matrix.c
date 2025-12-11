@@ -43,7 +43,6 @@ int	set_row_and_column(int *row_and_column, char *path)
 		if (row_and_column[1] == 0)
 			row_and_column[1] += ft_strlen(temp_line) - 1;
 		row_and_column[0]++;
-		ft_printf("%d:aaa%caaa\n", i, temp_line[ft_strlen(temp_line) - 1]);
 		i++;
 		if (temp_line[row_and_column[1]] != '\n' && temp_line[row_and_column[1]] != '\0')
 		{
