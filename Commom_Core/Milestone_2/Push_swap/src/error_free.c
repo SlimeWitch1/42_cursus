@@ -59,7 +59,7 @@ int	error_syntax(char *str_nbr)
 			|| ft_isdigit(*str_nbr)))
 		return (1);
 	if ((*str_nbr == '+' || *str_nbr == '-')
-		&& ft_isdigit(*str_nbr)
+		&& !ft_isdigit(str_nbr[1]))
 		return (1);
 	while (*++str_nbr)
 	{
