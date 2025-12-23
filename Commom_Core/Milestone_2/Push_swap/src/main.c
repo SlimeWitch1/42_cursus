@@ -34,7 +34,7 @@ void	set_final_index(t_stack_node *stack)
 	}
 }
 
-void	stack_init(t_stack_node **a, char **argv, bool flag_argc_2)
+void	stack_init(t_stack_node **a, char **argv, int splitted)
 {
 	long	nbr;
 	int		i;
@@ -43,17 +43,17 @@ void	stack_init(t_stack_node **a, char **argv, bool flag_argc_2)
 	while (argv[i])
 	{
 		if (error_syntax(argv[i]))
-			error_free(a, argv, flag_argc_2);
+			error_free(a, argv, splitted);
 		nbr = ft_atol(argv[i]);
 		if (nbr > INT_MAX || nbr < INT_MIN)
-			error_free(a, argv, flag_argc_2);
+			error_free(a, argv, splitted);
 		if (error_repetition(*a, (int)nbr))
-			error_free(a, argv, flag_argc_2);
+			error_free(a, argv, splitted);
 		append_node(a, (int)nbr);
 		i++;
 	}
-	if (flag_argc_2)
-		free_matrix(argv);
+	if (splitted)
+		free_string_array(argv);
 }
 
 static void	sort_stack(t_stack_node **a, t_stack_node **b)
@@ -84,13 +84,13 @@ int	main(int argc, char **argv)
 	if (argc == 1 || (argc == 2 && !argv[1][0]))
 		return (1);
 	if (argc > 2)
-		stack_init(&a, argv + 1, false);
+		stack_init(&a, argv + 1, 0);
 	else
 	{
 		numbers = ft_split(argv[1], ' ');
 		if (!numbers)
 			return (1);
-		stack_init(&a, numbers, true);
+		stack_init(&a, numbers, 1);
 	}
 	set_final_index(a);
 	sort_stack(&a, &b);
