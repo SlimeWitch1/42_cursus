@@ -56,14 +56,14 @@ void	error_free(t_stack_node **a, char **argv, int splitted)
 int	error_syntax(char *str_nbr)
 {
 	if (!(*str_nbr == '+' || *str_nbr == '-'
-			|| (ft_isdigit(*str_nbr))))
+			|| ft_isdigit(*str_nbr)))
 		return (1);
 	if ((*str_nbr == '+' || *str_nbr == '-')
-		&& !(str_nbr[1] >= '0' && str_nbr[1] <= '9'))
+		&& ft_isdigit(*str_nbr)
 		return (1);
 	while (*++str_nbr)
 	{
-		if (!(*str_nbr >= '0' && *str_nbr <= '9'))
+		if (!ft_isdigit(*str_nbr))
 			return (1);
 	}
 	return (0);
