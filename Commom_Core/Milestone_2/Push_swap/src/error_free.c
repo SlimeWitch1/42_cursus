@@ -12,19 +12,19 @@
 
 #include "push_swap.h"
 
-void	free_matrix(char **matrix)
+void	free_string_array(char **str)
 {
 	int	i;
 
-	if (!matrix)
+	if (!str)
 		return ;
 	i = 0;
-	while (matrix[i])
+	while (str[i])
 	{
-		free(matrix[i]);
+		free(str[i]);
 		i++;
 	}
-	free(matrix);
+	free(str);
 }
 
 void	free_stack(t_stack_node **stack)
@@ -44,11 +44,11 @@ void	free_stack(t_stack_node **stack)
 	*stack = NULL;
 }
 
-void	error_free(t_stack_node **a, char **argv, bool flag_argc_2)
+void	error_free(t_stack_node **a, char **argv, int splitted)
 {
 	free_stack(a);
-	if (flag_argc_2)
-		free_matrix(argv);
+	if (splitted)
+		free_string_array(argv);
 	write(2, "Error\n", 6);
 	exit(1);
 }
@@ -56,7 +56,7 @@ void	error_free(t_stack_node **a, char **argv, bool flag_argc_2)
 int	error_syntax(char *str_nbr)
 {
 	if (!(*str_nbr == '+' || *str_nbr == '-'
-			|| (*str_nbr >= '0' && *str_nbr <= '9')))
+			|| (ft_isdigit(*str_nbr))))
 		return (1);
 	if ((*str_nbr == '+' || *str_nbr == '-')
 		&& !(str_nbr[1] >= '0' && str_nbr[1] <= '9'))
