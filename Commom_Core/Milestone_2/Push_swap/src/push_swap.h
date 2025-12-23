@@ -34,14 +34,14 @@ typedef struct s_stack_node
 }				t_stack_node;
 
 //Errors and Frees
-void			free_matrix(char **argv);
-void			error_free(t_stack_node **a, char **argv, bool flag_argc_2);
+void			free_string_array(char **argv);
+void			error_free(t_stack_node **a, char **argv, int splitted);
 void			free_stack(t_stack_node **stack);
 int				error_repetition(t_stack_node *a, int nbr);
 int				error_syntax(char *str_nbr);
 
 //Stack
-void			stack_init(t_stack_node **a, char **argv, bool flag_argc_2);
+void			stack_init(t_stack_node **a, char **argv, int splitted);
 void			init_nodes(t_stack_node *a, t_stack_node *b);
 void			set_current_position(t_stack_node *stack);
 void			set_price(t_stack_node *a, t_stack_node *b);
